@@ -28,9 +28,13 @@ Features of `logtail`:
 
 3b. **Windows** install **logtail-crossterm:**
 
-    cargo +nightly build -Z features=itarget --bin logtail-crossterm
+To build on Windows you must use the 'nighly' compiler until the 'itarget' feature becomes part of 'stable', so first clone logtail-dash, build and use the binary it creates under `./taget/release`:
 
-    logtail-crossterm --help
+    git clone https://github.com/theWebalyst/logtail-dash
+    cd logtail-dash
+    cargo +nightly build -Z features=itarget --bin logtail-crossterm --release
+
+    ./target/release/logtail-crossterm --help
 
 Note: `vdash` is a fork of `logtail` that provides a dashboard for SAFE Network Vaults (see [vdash](https://github.com/theWebalyst/vdash)).
 
