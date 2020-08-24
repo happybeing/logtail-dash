@@ -17,25 +17,19 @@ Features of `logtail`:
 ## Install from crates.io
 1 Install **Rust** via https://doc.rust-lang.org/cargo/getting-started/installation.html
 
-2a. **Linux/MacOS** install **logtail:**
+2 **Linux (Ubuntu):**
+
+    sudo apt-get install build-essential
+
+3a. **Linux/MacOS** install **logtail:**
 
     cargo install logtail
     logtail --help
 
-2b. **Windows** install **logtail-crossterm:**
+3b. **Windows** install **logtail-crossterm:**
 
     cargo install logtail --bin logtail-crossterm --features="crossterm"
     logtail-crossterm --help
-
-3a. **Linux/MacOS** (optional) install **vdash:**
-
-    cargo install vdash
-    vdash --help
-
-3b. **Windows** (optional) install **vdash-crossterm:**
-
-    cargo install vdash --bin vdash-crossterm --features="crossterm"
-    vdash-crossterm --help
 
 Note: `vdash` is a fork of `logtail` that provides a dashboard for SAFE Network Vaults (see [vdash](https://github.com/theWebalyst/vdash)).
 
