@@ -28,7 +28,8 @@ Features of `logtail`:
 
 3b. **Windows** install **logtail-crossterm:**
 
-    cargo install logtail --bin logtail-crossterm --features="crossterm"
+    cargo +nightly build -Z features=itarget --bin logtail-crossterm
+
     logtail-crossterm --help
 
 Note: `vdash` is a fork of `logtail` that provides a dashboard for SAFE Network Vaults (see [vdash](https://github.com/theWebalyst/vdash)).
