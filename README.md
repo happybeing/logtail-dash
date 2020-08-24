@@ -32,7 +32,7 @@ To build on Windows you must use the 'nighly' compiler until the 'itarget' featu
 
     git clone https://github.com/theWebalyst/logtail-dash
     cd logtail-dash
-    cargo +nightly build -Z features=itarget --bin logtail-crossterm --release
+    cargo +nightly build -Z features=itarget --bin logtail-crossterm --release --no-default-features
 
     ./target/release/logtail-crossterm --help
 
