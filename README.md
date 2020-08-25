@@ -28,7 +28,11 @@ Features of `logtail`:
 
 3b. **Windows** install **logtail-crossterm:**
 
-To build on Windows you must use the 'nighly' compiler until the 'itarget' feature becomes part of 'stable', so first clone logtail-dash, build and use the binary it creates under `./taget/release`:
+To build on Windows you must use the 'nightly' compiler until the 'itarget' feature becomes part of 'stable', so install Rust nightly using `rustup`:
+
+    rustup toolchain install nightly
+    
+To build `logtail-crossterm` on Windows, clone logtail-dash, build with `+nightly` and use the binary it creates under `./taget/release`:
 
     git clone https://github.com/theWebalyst/logtail-dash
     cd logtail-dash
