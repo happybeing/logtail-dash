@@ -1,3 +1,5 @@
+[![crates.io](http://meritbadge.herokuapp.com/logtail)](https://crates.io/crates/logtail)
+
 # Terminal Dashboard for Monitoring Log Files
 
 `logtail` displays one or more log files in the terminal in the manner of `tail -f`.
