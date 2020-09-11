@@ -9,7 +9,7 @@
 //!
 //! See README for more information.
 
-#![recursion_limit = "256"] // Prevent select! macro blowing up
+#![recursion_limit = "512"] // Prevent select! macro blowing up
 
 use std::collections::HashMap;
 use std::io;
@@ -20,7 +20,7 @@ use tokio::stream::StreamExt;
 ///! forks of logterm customise the files in src/custom
 #[path = "../custom/mod.rs"]
 pub mod custom;
-use self::custom::app::{DashState, DashViewMain, LogMonitor};
+use self::custom::app::{App, DashState, DashViewMain, LogMonitor};
 use self::custom::opt::Opt;
 use self::custom::ui::draw_dashboard;
 
@@ -49,9 +49,7 @@ type TuiTerminal = tui::terminal::Terminal<
 	>,
 >;
 
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-use structopt::StructOpt;
+use std::io::{Error, ErrorKind};
 
 use futures::{
 	future::FutureExt, // for `.fuse()`
@@ -61,50 +59,25 @@ use futures::{
 
 #[tokio::main]
 pub async fn main() -> std::io::Result<()> {
-	let opt = Opt::from_args();
-
-	if opt.files.is_empty() {
-		println!("{}: no logfile(s) specified.", Opt::clap().get_name());
-		println!(
-			"Try '{} --help' for more information.",
-			Opt::clap().get_name()
-		);
-		return Ok(());
+	match terminal_main().await {
+		Ok(()) => (),
+		Err(e) => println!("{}", e),
 	}
+	Ok(())
+}
 
-	let mut dash_state = DashState::new();
+async fn terminal_main() -> std::io::Result<()> {
+	let mut app = match App::new().await {
+		Ok(app) => app,
+		Err(e) => {
+			return Err(e);
+		}
+	};
+
 	let events = Events::new();
-	let mut monitors: HashMap<String, LogMonitor> = HashMap::new();
-	let mut logfiles = MuxedLines::new()?;
-
-	println!("Loading...");
-	for f in opt.files {
-		let mut monitor = LogMonitor::new(f.to_string(), opt.lines_max);
-		println!("{}", monitor.logfile);
-		if opt.ignore_existing {
-			monitors.insert(f.to_string(), monitor);
-		} else {
-			match monitor.load_logfile() {
-				Ok(()) => {
-					monitors.insert(f.to_string(), monitor);
-				}
-				Err(e) => {
-					println!("...failed: {}", e);
-					return Ok(());
-				}
-			}
-		}
-		match logfiles.add_file(&f).await {
-			Ok(_) => println!("{} done.", &f),
-			Err(e) => {
-				println!("ERROR: {}", e);
-				println!("Note: it is ok for the file not to exist, but the file's parent directory must exist.");
-				return Ok(());
-			}
-		}
-	}
 
 	// Terminal initialization
+	// info!("Intialising terminal (termion backend)");
 	let stdout = io::stdout().into_raw_mode()?;
 	let stdout = MouseTerminal::from(stdout);
 	let stdout = AlternateScreen::from(stdout);
@@ -113,50 +86,66 @@ pub async fn main() -> std::io::Result<()> {
 
 	// Use futures of async functions to handle events
 	// concurrently with logfile changes.
+	// info!("Processing started");
 	loop {
 		let events_future = next_event(&events).fuse();
-		let logfiles_future = logfiles.next().fuse();
+		let logfiles_future = app.logfiles.next().fuse();
 		pin_mut!(events_future, logfiles_future);
 
 		select! {
-		  (e) = events_future => {
-			match e {
-			  Ok(Event::Input(input)) => {
-				  match input {
-					Key::Char('q')|
-					Key::Char('Q') => return Ok(()),
-					Key::Char('h')|
-					Key::Char('H') => dash_state.main_view = DashViewMain::DashHorizontal,
-					Key::Char('v')|
-					Key::Char('V') => dash_state.main_view = DashViewMain::DashVertical,
-				  _ => {},
-				  }
-			  }
+			(e) = events_future => {
+				match e {
+					Ok(Event::Input(input)) => {
+						match input {
+							Key::Char('q')|
+							Key::Char('Q') => return Ok(()),
+							Key::Char('h')|
+							Key::Char('H') => app.dash_state.main_view = DashViewMain::DashHorizontal,
+							Key::Char('v')|
+							Key::Char('V') => app.dash_state.main_view = DashViewMain::DashVertical,
+							Key::Down => app.handle_arrow_down(),
+							Key::Up => app.handle_arrow_up(),
+							Key::Right|
+							Key::Char('\t') => app.change_focus_next(),
+							Key::Left => app.change_focus_previous(),
+								_ => {},
+						}
+					}
 
-			  Ok(Event::Tick) => {
-				terminal.draw(|f| draw_dashboard(f, &dash_state, &mut monitors))?;
-			  }
+					Ok(Event::Tick) => {
+						match terminal.draw(|f| draw_dashboard(f, &mut app.dash_state, &mut app.monitors)) {
+							Ok(_) => {},
+							Err(e) => {
+								return Err(e);
+							}
+						};
+					}
 
-			  Err(error) => {
-				println!("{}", error);
-			  }
-			}
-		  },
-		  (line) = logfiles_future => {
-			match line {
-			  Some(Ok(line)) => {
-				let source_str = line.source().to_str().unwrap();
-				let source = String::from(source_str);
-
-				match monitors.get_mut(&source) {
-				  None => (),
-				  Some(monitor) => monitor.append_to_content(line.line())
+					Err(e) => {
+						return Err(Error::new(ErrorKind::Other, "receive error"));
+					}
 				}
-			  },
-			  Some(Err(e)) => panic!("{}", e),
-			  None => (),
-			}
-		  },
+			},
+			(line) = logfiles_future => {
+				match line {
+					Some(Ok(line)) => {
+						app.dash_state._debug_window(format!("logfile: {}", line.line()).as_str());
+						let source_str = line.source().to_str().unwrap();
+						let source = String::from(source_str);
+
+						match app.monitors.get_mut(&source) {
+							Some(monitor) => {
+								monitor.append_to_content(line.line())
+							},
+							None => (),
+						}
+					},
+					Some(Err(e)) => {
+						return Err(e)
+					},
+					None => (),
+				}
+			},
 		}
 	}
 }

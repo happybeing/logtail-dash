@@ -7,6 +7,7 @@
 Features of `logtail`:
 - it displays more than one logfile, one above the other or side-by-side
 - the display updates as each logfile grows
+- use tab or arrow keys to navigate and scroll
 - you can fork **logtail-dash** to create customised views of your logfile data
 
 `logtail` is written in Rust and uses [tui-rs](https://github.com/fdehau/tui-rs) to create the terminal UI, and [linemux](https://github.com/jmagnuson/linemux) to monitor the logfiles.
