@@ -398,7 +398,7 @@ dependencies = [
 
 [[package]]
 name = "logtail"
-version = "0.2.5"
+version = "0.2.6"
 dependencies = [
  "crossterm",
  "futures",
