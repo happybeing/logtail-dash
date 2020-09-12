@@ -29,6 +29,6 @@ pub struct Opt {
 
 	// Show a debug window (not implemented in logtail)
 	/// (Not implemented in logtail).
-	#[structopt(short, long)]
+	#[structopt(short, long, hidden = true)]
 	pub debug_window: bool,
 }
