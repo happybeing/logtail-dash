@@ -123,11 +123,10 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
 					Some(Ok(line)) => {
 					let source_str = line.source().to_str().unwrap();
 					let source = String::from(source_str);
-
-					match app.monitors.get_mut(&source) {
-						None => (),
-						Some(monitor) => monitor.append_to_content(line.line())
-					}
+						match app.get_monitor_for_file_path(&source) {
+							Some(monitor) => monitor.append_to_content(line.line()),
+							None => panic!("No monitor for file: {}",&source),
+						}
 					},
 					Some(Err(e)) => panic!("{}", e),
 					None => (),

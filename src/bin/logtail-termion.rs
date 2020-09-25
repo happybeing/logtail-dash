@@ -134,11 +134,9 @@ async fn terminal_main() -> std::io::Result<()> {
 						let source_str = line.source().to_str().unwrap();
 						let source = String::from(source_str);
 
-						match app.monitors.get_mut(&source) {
-							Some(monitor) => {
-								monitor.append_to_content(line.line())
-							},
-							None => (),
+							match app.get_monitor_for_file_path(&source) {
+							Some(monitor) => monitor.append_to_content(line.line()),
+							None => panic!("No monitor for file: {}",&source),
 						}
 					},
 					Some(Err(e)) => {
