@@ -81,10 +81,6 @@ impl Events {
 		}
 	}
 
-	// pub async fn next(&self) -> Option<Event<Key>> {
-	// 	self.rx.recv().await
-	// }
-
 	pub fn disable_exit_key(&mut self) {
 		self.ignore_exit_key.store(true, Ordering::Relaxed);
 	}
