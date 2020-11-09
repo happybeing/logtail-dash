@@ -20,7 +20,7 @@ Features of `logtail`:
 ## Install from crates.io
 1 Install **Rust** via https://doc.rust-lang.org/cargo/getting-started/installation.html
 
-2 **Linux (Ubuntu):**
+2 **Linux (Ubuntu)**
 
     sudo apt-get install build-essential
 
@@ -37,13 +37,13 @@ To build on Windows you must use the 'nightly' compiler until the 'itarget' feat
     
 To build `logtail-crossterm` on Windows, clone logtail-dash, build with `+nightly` and use the binary it creates under `./taget/release`:
 
-    git clone https://github.com/theWebalyst/logtail-dash
+    git clone https://github.com/happybeing/logtail-dash
     cd logtail-dash
     cargo +nightly build -Z features=itarget --bin logtail-crossterm --release --no-default-features
 
     ./target/release/logtail-crossterm --help
 
-Note: `vdash` is a fork of `logtail` that provides a dashboard for SAFE Network Vaults (see [vdash](https://github.com/theWebalyst/vdash)).
+Note: `vdash` is a fork of `logtail` that provides a dashboard for SAFE Network Vaults (see [vdash](https://github.com/happybeing/vdash)).
 
 ## Usage
 
@@ -69,7 +69,7 @@ you can do this by creating a fork and customising the files in src/custom:
 
 `src/custom/ui.rs `:    dashboard display and keyboard/mouse interface
 
-Example: `vdash` is a fork of `logtail` that provides a dashboard for SAFE Network Vaults (see [vdash](https://github.com/theWebalyst/vdash)).
+Example: `vdash` is a fork of `logtail` that provides a dashboard for SAFE Network Vaults (see [vdash](https://github.com/happybeing/vdash)).
 
 ## Build
 ### Get pre-requisites
@@ -77,7 +77,7 @@ Example: `vdash` is a fork of `logtail` that provides a dashboard for SAFE Netwo
 
 ### Get code
 ```
-git clone https://github.com/theWebalyst/logtail-dash
+git clone https://github.com/happybeing/logtail-dash
 cd logtail-dash
 ```
 
