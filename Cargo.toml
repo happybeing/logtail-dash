@@ -1,11 +1,11 @@
 [package]
 name = "logtail"
 description = "Displays and updates a dashboard based on one or more logfiles"
-version = "0.2.7"
+version = "0.2.8"
 authors = ["Mark <git@happybeing.com>"]
 license = "GPL-3.0"
-homepage = "https://github.com/theWebalyst/logtail-dash"
-repository = "https://github.com/theWebalyst/logtail-dash"
+homepage = "https://github.com/happybeing/logtail-dash"
+repository = "https://github.com/happybeing/logtail-dash"
 readme = "README.md"
 exclude = [".github"]
 keywords = ["utility", "logfile", "monitor", "cli"]
@@ -18,19 +18,20 @@ edition = "2018"
 default = ["termion", "crossterm"]
 
 [dependencies]
-rand = "0.7.3"
-structopt = "~0.3.15"
-linemux = "0.1.1"
-tokio = { version = "0.2.22", features = ["sync"] }
-futures = "0.3.5"
+tokio = { version = "0.2.22", features = ["sync", "macros"] }
 termion = { version = "1.5", optional = true }
 crossterm = { version = "0.17", optional = true }
+linemux = "0.1.2"
+structopt = "~0.3.15"
+futures = "0.3.5"
+rand = "0.7.3"
+tokio-macros = "0.3.1"
 
 [target.'cfg(not(windows))'.dependencies]
-tui = { version = "0.10.0", features = ["termion", "crossterm"], default-features = false }
+tui = { version = "0.11.0", features = ["termion", "crossterm"], default-features = false }
 
 [target.'cfg(windows)'.dependencies]
-tui = { version = "0.10.0", features = ["crossterm"], default-features = false }
+tui = { version = "0.11.0", features = ["crossterm"], default-features = false }
 
 [[bin]]
 name = "logtail"

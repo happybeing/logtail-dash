@@ -368,9 +368,9 @@ checksum = "a2f02823cf78b754822df5f7f268fb59822e7296276d3e069d8e8cb26a14bd10"
 
 [[package]]
 name = "linemux"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d81024f5372a04e9c8289c7b4dc6e8e8f0164e48e1e7c97cfb8d927358e9b1f0"
+checksum = "59fae219a45e894c62084c5ee97f372809eff2e1414607634cdb3106116d2656"
 dependencies = [
  "futures-util",
  "notify",
@@ -398,7 +398,7 @@ dependencies = [
 
 [[package]]
 name = "logtail"
-version = "0.2.7"
+version = "0.2.8"
 dependencies = [
  "crossterm",
  "futures",
@@ -407,6 +407,7 @@ dependencies = [
  "structopt",
  "termion",
  "tokio",
+ "tokio-macros 0.3.1",
  "tui",
 ]
 
@@ -496,9 +497,9 @@ dependencies = [
 
 [[package]]
 name = "notify"
-version = "5.0.0-pre.3"
+version = "5.0.0-pre.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77d03607cf88b4b160ba0e9ed425fff3cee3b55ac813f0c685b3a3772da37d0e"
+checksum = "a8b946889dfdad884379cd56367d93b6d0ce8889cc027d26a69a3a31c0a03bb5"
 dependencies = [
  "anymap",
  "bitflags",
@@ -841,7 +842,7 @@ dependencies = [
  "memchr",
  "pin-project-lite",
  "slab",
- "tokio-macros",
+ "tokio-macros 0.2.5",
 ]
 
 [[package]]
@@ -856,10 +857,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "tui"
-version = "0.10.0"
+name = "tokio-macros"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a977b0bb2e2033a6fef950f218f13622c3c34e59754b704ce3492dedab1dfe95"
+checksum = "21d30fdbb5dc2d8f91049691aa1a9d4d4ae422a21c334ce8936e5886d30c5c45"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "tui"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36626dee5ede9fd34015e9fb4fd7eedf3f3d05bdf1436aaef15b7d0a24233778"
 dependencies = [
  "bitflags",
  "cassowary",
