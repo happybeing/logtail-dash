@@ -368,9 +368,9 @@ checksum = "a2f02823cf78b754822df5f7f268fb59822e7296276d3e069d8e8cb26a14bd10"
 
 [[package]]
 name = "linemux"
-version = "0.1.2"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59fae219a45e894c62084c5ee97f372809eff2e1414607634cdb3106116d2656"
+checksum = "9f5feb05aa787c1b3dd09699985d84d6074e2ac3c6163a720d57f67034b34cdb"
 dependencies = [
  "futures-util",
  "notify",
