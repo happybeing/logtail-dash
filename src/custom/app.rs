@@ -45,14 +45,25 @@ impl App {
 		for f in &opt.files {
 			println!("file: {}", f);
 			let mut monitor = LogMonitor::new(f.to_string(), opt.lines_max);
+			let f = match logfiles.add_file(&f).await {
+				Ok(canonical_path) => canonical_path.to_string_lossy().to_string(),
+				Err(e) => {
+					println!("ERROR: {}", e);
+					println!(
+						"Note: it is ok for the file not to exist, but the file's parent directory must exist."
+					);
+					return Err(e);
+				}
+			};
+
 			if opt.ignore_existing {
-				logfile_names.push(f.to_string());
-				monitors.insert(f.to_string(), monitor);
+				logfile_names.push(f.clone());
+				monitors.insert(f.clone(), monitor);
 			} else {
 				match monitor.load_logfile() {
 					Ok(()) => {
-						logfile_names.push(f.to_string());
-						monitors.insert(f.to_string(), monitor);
+						logfile_names.push(f.clone());
+						monitors.insert(f.clone(), monitor);
 					}
 					Err(e) => {
 						println!("...failed: {}", e);
@@ -62,19 +73,9 @@ impl App {
 			}
 
 			if name_for_focus.is_empty() {
-				name_for_focus = f.to_string();
+				name_for_focus = f.clone();
 			}
 
-			match logfiles.add_file(&f).await {
-				Ok(_) => (),
-				Err(e) => {
-					println!("ERROR: {}", e);
-					println!(
-						"Note: it is ok for the file not to exist, but the file's parent directory must exist."
-					);
-					return Err(e);
-				}
-			}
 		}
 
 		let mut app = App {
