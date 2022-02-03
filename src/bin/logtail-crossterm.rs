@@ -11,7 +11,7 @@
 
 #![recursion_limit = "512"] // Prevent select! macro blowing up
 
-use tokio::stream::StreamExt;
+use tokio_stream::StreamExt;
 use tokio::sync::mpsc;
 
 ///! forks of logterm customise the files in src/custom

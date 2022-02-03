@@ -15,7 +15,7 @@ use std::collections::HashMap;
 use std::io;
 
 use linemux::MuxedLines;
-use tokio::stream::StreamExt;
+use tokio_stream::StreamExt;
 
 ///! forks of logterm customise the files in src/custom
 #[path = "../custom/mod.rs"]
